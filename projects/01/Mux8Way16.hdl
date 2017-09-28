@@ -18,5 +18,65 @@ CHIP Mux8Way16 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+    /* 000 */
+    Not(in=sel[2], out=num0004);
+    Not(in=sel[1], out=num0002);
+    Not(in=sel[0], out=num0001);
+    And(a=num0004, b=num0002, out=num00042);
+    And(a=num00042, b=num0001, out=num000);
+
+    /* 001 */
+    Not(in=sel[2], out=num0014);
+    Not(in=sel[1], out=num0012);
+    And(a=num0014, b=num0012, out=num00142);
+    And(a=num00142, b=sel[0], out=num001);
+
+    /* 010 */
+    Not(in=sel[2], out=num0104);
+    Not(in=sel[0], out=num0101);
+    And(a=num0104, b=num0101, out=num01041);
+    And(a=num01041, b=sel[1], out=num010);
+
+    /* 011 */
+    Not(in=sel[2], out=num0114);
+    And(a=sel[1], b=sel[0], out=num01121);
+    And(a=num0114, b=num01121, out=num011);
+
+    /* 100 */
+    Not(in=sel[0], out=num1001);
+    Not(in=sel[1], out=num1002);
+    And(a=num1001, b=num1002, out=num10021);
+    And(a=sel[2], b=num10021, out=num100421);
+
+    /* 101 */
+    And(a=sel[0], b=sel[2], out=num10141);
+    Not(in=sel[1], out=num1012);
+    And(a=num10141, b=num1012, out=num101);
+
+    /* 110 */
+    Not(in=sel[0], out=num1101);
+    And(a=sel[2], b=sel[1], out=num11042);
+    And(a=num1101, b=num11042, out=num110);
+
+    /* 111 */
+    And(a=sel[2], b=sel[1], out=num11142);
+    And(a=num11142, b=sel[0], out=num111);
+
+    /* Narrow down */
+    Mux16(a=a, b=b, sel=num001, out=mux000OR001);
+    Mux16(a=c, b=d, sel=num011, out=mux010OR011);
+    Or(a=num010, b=num011, out=num010OR011);
+    Mux16(a=mux000OR001, b=mux010OR011, sel=num010OR011, out=mux000OR001OR010OR011);
+
+    Or(a=num000, b=num001, out=num000OR001);
+    Or(a=num000OR001, b=num010OR011, out=num000OR001OR010OR011);
+    
+    Mux16(a=e, b=f, sel=num101, out=mux100OR101);
+    Mux16(a=g, b=h, sel=num111, out=mux110OR111);
+
+    Or(a=num110, b=num111, out=num101OR111);
+    Mux16(a=mux100OR101, b=mux110OR111, sel=num101OR111, out=mux100OR101OR110OR111);
+
+    Mux16(a=mux100OR101OR110OR111, b=mux000OR001OR010OR011, sel=num000OR001OR010OR011, out=out);
 }
