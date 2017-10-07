@@ -1,0 +1,12 @@
+/**
+ * NG: 
+ * out = return true if the first digit is zero
+ */
+
+CHIP NG {
+    IN in[16];
+    OUT out;
+
+    PARTS:
+    And(a=in[15], b=true, out=out);
+}
